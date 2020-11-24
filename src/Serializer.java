@@ -1,4 +1,4 @@
-package serial;
+
 
 import java.util.*;
 import javax.json.*;
@@ -32,13 +32,44 @@ public class Serializer {
     }
     
     private static Object[] createObj() {
-    	System.out.println("Number of objects:");
+    	System.out.println("Choose option 1-5 (refer to assignment description):");
     	Scanner sc = new Scanner(System.in);
-    	int num = sc.nextInt();
-    	for (int i = 0;i < num;++i) {
-    		System.out.printf("Creating object %d:\n", i);
+    	int mode = sc.nextInt();
+    	Object[] output;
+    	switch (mode) {
+	    	case 1:
+	    		System.out.println("Simple object, enter bool, int, double:");
+	    		boolean b = sc.nextBoolean();
+	    		int i = sc.nextInt();
+	    		double d = sc.nextDouble();
+	    		Object simObj = new SimpleObject(b,i,d);
+	    		output = new Object[1];
+	    		output[0] = simObj;
+	    		break;
+	    	case 2:
+	    		System.out.println("Object with reference, enter 2 integers for 2 objects:");
+	    		Object ref1 = new RefObject(sc.nextInt());
+	    		Object ref2 = new RefObject(sc.nextInt());
+	    		((RefObject) ref1).setParent((RefObject) ref2);
+	    		((RefObject) ref2).setParent((RefObject) ref2);
+	    		output = new Object[2];
+	    		output[0] = ref1;
+	    		output[1] = ref2;
+	    		break;
+	    	case 3: 
+	    		System.out.println("Object with array, enter array length:");
+	    		break;
+	    	case 4: 
+	    		System.out.println("Object with array of references, enter array length:");
+	    		break;
+	    	case 5: 
+	    		System.out.println("Object with collection, enter collection sizes");
+	    		break;
+    	
     		
     	}
+    	
+    	
     	return null;
     } 
     
