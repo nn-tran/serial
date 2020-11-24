@@ -1,9 +1,14 @@
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class CollectionObject implements Serializable{
-
-	public CollectionObject() {
-		// TODO Auto-generated constructor stub
+	ArrayList<SimpleObject> simList;
+	
+	public CollectionObject(int size) {
+		for (int i = 0; i < size; ++i) {
+			SimpleObject sim = new SimpleObject(false, i, 5.0);
+			simList.add(sim);
+		}
 	}
 
 }

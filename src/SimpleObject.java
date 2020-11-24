@@ -17,15 +17,15 @@ public class SimpleObject implements Serializable{
 		timer = t;
 	}
 
-	public void setAlarm1() {
+	public void setAlarm() {
 		sleeping = true;
 		hour = 8;
 		timer = 6.0;
 	}
 	
-	public void setAlarm2() {
+	public void setAlarm(int n) {
 		sleeping = true;
-		hour = 24;
+		hour = n;
 		timer = 0.0;
 	}
 }

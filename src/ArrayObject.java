@@ -11,5 +11,13 @@ public class ArrayObject implements Serializable{
 			scoreboard[i]=i;
 		}
 	}
+	
+	public ArrayObject(int len) {
+		victory = true;
+		scoreboard = new int[len];
+		for (int i = 0; i < len; ++i) {
+			scoreboard[i]=i;
+		}
+	}
 
 }

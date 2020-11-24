@@ -35,7 +35,7 @@ public class Serializer {
     	System.out.println("Choose option 1-5 (refer to assignment description):");
     	Scanner sc = new Scanner(System.in);
     	int mode = sc.nextInt();
-    	Object[] output;
+    	Object[] output = null;
     	switch (mode) {
 	    	case 1:
 	    		System.out.println("Simple object, enter bool, int, double:");
@@ -58,19 +58,26 @@ public class Serializer {
 	    		break;
 	    	case 3: 
 	    		System.out.println("Object with array, enter array length:");
+	    		Object arrayObj = new ArrayObject(sc.nextInt());
+	    		output = new Object[1];
+	    		output[0] = arrayObj;
 	    		break;
 	    	case 4: 
 	    		System.out.println("Object with array of references, enter array length:");
+	    		Object refArrayObj = new RefArrayObject(sc.nextInt());
+	    		output = new Object[1];
+	    		output[0] = refArrayObj;
 	    		break;
 	    	case 5: 
-	    		System.out.println("Object with collection, enter collection sizes");
+	    		System.out.println("Object with collection, enter collection size:");
+	    		Object collectionObj = new CollectionObject(sc.nextInt());
+	    		output = new Object[1];
+	    		output[0] = collectionObj;
 	    		break;
-    	
-    		
     	}
     	
     	
-    	return null;
+    	return output;
     } 
     
     public static void main(String[] args) {  
