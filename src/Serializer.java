@@ -3,7 +3,9 @@
 import java.util.*;
 import javax.json.*;
 import java.io.*;
+import java.lang.reflect.Field;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * CPSC 501 
@@ -24,16 +26,38 @@ public class Serializer {
     private static void serializeHelper(Object source, JsonArrayBuilder object_list, Map<Object, String> object_tracking_map) throws Exception {
         String object_id = Integer.toString(object_tracking_map.size());
         object_tracking_map.put(source, object_id);
-        Class object_class = source.getClass();
         JsonObjectBuilder object_info = Json.createObjectBuilder();
-        object_info.add("class", object_class.getName());
         object_info.add("id", object_id);
+        
+        Class object_class = source.getClass();
+        object_info.add("class", object_class.getName());
+        
+        Field[] fields = object_class.getDeclaredFields();
+        JsonArrayBuilder fieldsJson = Json.createArrayBuilder();
+		Field.setAccessible(fields, true);
+		for (Field f : fields) {
+			
+			JsonObjectBuilder field = Json.createObjectBuilder();
+			field.add("name", f.getName());
+			field.add("declaringclass", f.getDeclaringClass().getName());
+			
+			Object value = f.get(source);
+			
+			if (f.getType().isPrimitive()) {
+				field.add("value", value.toString());
+			} else if (f.getType().isArray()) {
+				
+			}
+			fieldsJson.add(field);
+			
+		}
+		object_info.add("fields", fieldsJson);
         object_list.add(object_info);
     }
     
-    private static Object[] createObj() {
+    private static Object[] createObj(InputStream input) {
     	System.out.println("Choose option 1-5 (refer to assignment description):");
-    	Scanner sc = new Scanner(System.in);
+    	Scanner sc = new Scanner(input);
     	int mode = sc.nextInt();
     	Object[] output = null;
     	switch (mode) {
@@ -80,16 +104,24 @@ public class Serializer {
     	return output;
     } 
     
-    public static void main(String[] args) {  
-    	try{      
-    		ServerSocket ss = new ServerSocket(8192);
-    		Socket s = ss.accept();//establishes connection   
-	    	DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-	    	dout.writeUTF("Hello Client");
-	    	dout.flush();
-	    	dout.close();
-	    	s.close();
-	    	ss.close();
-    	} catch (Exception e){System.out.println(e);}  
+    public static void main(String[] args) throws Exception {
+    	final String filename = "test.json";
+    	//JsonObject object = Serializer.serializeObject(createObj(System.in)[0]);
+    	String tester = "1\ntrue\n1\n6.6";
+    	InputStream stream = new ByteArrayInputStream(tester.getBytes(StandardCharsets.UTF_8));
+
+    	JsonObject object = Serializer.serializeObject(createObj(stream)[0]);
+        JsonWriter writer = Json.createWriter(new FileOutputStream(filename));
+        writer.writeObject(object);
+//    	try{      
+//    		ServerSocket ss = new ServerSocket(8192);
+//    		Socket s = ss.accept();//establishes connection   
+//	    	DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+//	    	dout.writeUTF("Hello Client");
+//	    	dout.flush();
+//	    	dout.close();
+//	    	s.close();
+//	    	ss.close();
+//    	} catch (Exception e){System.out.println(e);}  
     }  
 }
