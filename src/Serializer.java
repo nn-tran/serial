@@ -24,6 +24,9 @@ public class Serializer {
     }
 
     private static void serializeHelper(Object source, JsonArrayBuilder object_list, Map<Object, String> object_tracking_map) throws Exception {
+    	if (object_tracking_map.get(source) != null) {
+    		return;
+    	}
         String object_id = Integer.toString(object_tracking_map.size());
         object_tracking_map.put(source, object_id);
         JsonObjectBuilder object_info = Json.createObjectBuilder();
@@ -31,6 +34,11 @@ public class Serializer {
         
         Class object_class = source.getClass();
         object_info.add("class", object_class.getName());
+        if (object_class.isArray()) {
+        	object_info.add("type", "array");
+        } else {
+        	object_info.add("type", "object");
+        }
         
         Field[] fields = object_class.getDeclaredFields();
         JsonArrayBuilder fieldsJson = Json.createArrayBuilder();
@@ -45,14 +53,25 @@ public class Serializer {
 			
 			if (f.getType().isPrimitive()) {
 				field.add("value", value.toString());
-			} else if (f.getType().isArray()) {
-				
+			} else if (value == null) {
+				field.add("reference", "null");
+			} else {
+				serializeHelper(value, object_list, object_tracking_map);
+				field.add("reference", object_tracking_map.get(value));
 			}
 			fieldsJson.add(field);
 			
 		}
 		object_info.add("fields", fieldsJson);
         object_list.add(object_info);
+    }
+    
+    private static void objectHandler(Object source, JsonArrayBuilder object_list, Map<Object, String> object_tracking_map) throws Exception{
+    	
+    }
+    
+private static void arrayHandler(Object source, JsonArrayBuilder object_list, Map<Object, String> object_tracking_map) throws Exception{
+    	
     }
     
     private static Object[] createObj(InputStream input) {
@@ -75,7 +94,7 @@ public class Serializer {
 	    		Object ref1 = new RefObject(sc.nextInt());
 	    		Object ref2 = new RefObject(sc.nextInt());
 	    		((RefObject) ref1).setParent((RefObject) ref2);
-	    		((RefObject) ref2).setParent((RefObject) ref2);
+	    		((RefObject) ref2).setParent((RefObject) ref1);
 	    		output = new Object[2];
 	    		output[0] = ref1;
 	    		output[1] = ref2;
@@ -107,7 +126,9 @@ public class Serializer {
     public static void main(String[] args) throws Exception {
     	final String filename = "test.json";
     	//JsonObject object = Serializer.serializeObject(createObj(System.in)[0]);
-    	String tester = "1\ntrue\n1\n6.6";
+    	//String tester = "1\ntrue\n1\n6.6";
+    	//String tester = "2\n1\n2";
+    	String tester = "4\n3";
     	InputStream stream = new ByteArrayInputStream(tester.getBytes(StandardCharsets.UTF_8));
 
     	JsonObject object = Serializer.serializeObject(createObj(stream)[0]);

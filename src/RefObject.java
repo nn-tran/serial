@@ -2,7 +2,7 @@ import java.io.Serializable;
 
 public class RefObject implements Serializable{
 	int value;
-	RefObject parent;
+	RefObject child, parent;
 	
 	public RefObject(){
 		value = 0;
@@ -15,6 +15,11 @@ public class RefObject implements Serializable{
 	public void setParent(RefObject parent) {
 		this.parent = parent;
 	}
+	
+	public void setChild(RefObject child) {
+		this.child = child;
+	}
+
 
 	public void setValue(int value) {
 		this.value = value;

@@ -10,6 +10,7 @@ public class RefArrayObject implements Serializable {
 	public RefArrayObject(int len){
 		simArray = new SimpleObject[len];
 		for (SimpleObject sim : simArray) {
+			sim = new SimpleObject();
 			sim.setAlarm(len);
 		}
 	}
