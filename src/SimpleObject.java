@@ -28,4 +28,19 @@ public class SimpleObject implements Serializable{
 		hour = n;
 		timer = 0.0;
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o == this) { 
+            return true; 
+        } 
+        if (!(o instanceof SimpleObject)) { 
+            return false; 
+        } 
+          
+        SimpleObject sim = (SimpleObject) o; 
+          
+        // Compare the data members and return accordingly  
+        return (sim.hour == this.hour);
+	}
 }
