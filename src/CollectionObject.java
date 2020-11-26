@@ -4,6 +4,8 @@ import java.util.ArrayList;
 public class CollectionObject implements Serializable{
 	ArrayList<SimpleObject> simList;
 	
+	public CollectionObject() {}
+
 	public CollectionObject(int size) {
 		simList = new ArrayList<SimpleObject>();
 		for (int i = 0; i < size; ++i) {

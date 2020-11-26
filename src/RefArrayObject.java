@@ -3,6 +3,8 @@ import java.io.Serializable;
 public class RefArrayObject implements Serializable {
 	public SimpleObject[] simArray;
 	
+	public RefArrayObject(){}
+	
 	public RefArrayObject(int len){
 		simArray = new SimpleObject[len];
 		for (SimpleObject sim : simArray) {

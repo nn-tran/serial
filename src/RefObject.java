@@ -4,12 +4,17 @@ public class RefObject implements Serializable{
 	int value;
 	RefObject child, parent;
 	
+	
 	public RefObject(){
 		value = 0;
 	}
 
 	public RefObject(int v){
 		setValue(v);
+	}
+
+	public RefObject getParent() {
+		return parent;
 	}
 	
 	public void setParent(RefObject parent) {
