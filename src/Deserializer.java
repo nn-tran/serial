@@ -5,6 +5,7 @@ import java.util.*;
 import javax.json.*;
 import java.io.*;
 import java.net.*;
+import java.nio.charset.StandardCharsets;
 
 /**
  * CPSC 501 
@@ -95,6 +96,13 @@ public class Deserializer {
 		}
 	}
 	
+	/**
+	 * convert string to appropriate primitive type
+	 * @param type resulting class
+	 * @param value string representation of the value
+	 * @return object of the correct type
+	 * @throws Exception with no error handling
+	 */
 	private static Object convert(Class type, String value) throws Exception {
 		Object ret = null;
 		if (type == boolean.class) {
@@ -119,14 +127,13 @@ public class Deserializer {
 
 	public static void main(String[] args){  
 		try {  
-			
-			//Socket s = new Socket("localhost",8192); 
-			//BufferedReader d = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			//String  str = (String) d.readLine();  
-			//Deserializer.deserializeObject(Json.createReader(s.getInputStream()).readObject());
-			BufferedReader d = new BufferedReader(new FileReader("test.json"));
+			System.out.println("listening for JSON...");
+			Socket s = new Socket("localhost",8192);
+			//BufferedReader d = new BufferedReader(new FileReader("test.json"));//testing code, read from test.json instead of through the network
+			BufferedReader d = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));
+			JsonReader jReader = Json.createReader(s.getInputStream());
+			Object obj = Deserializer.deserializeObject(jReader.readObject());
 			Inspector in = new Inspector();
-			Object obj = Deserializer.deserializeObject(Json.createReader(d).readObject());
 			if (obj != null) {
 				in.inspect(obj, false);
 			} else {

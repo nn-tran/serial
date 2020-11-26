@@ -183,26 +183,31 @@ public class Serializer {
 	
 	
 	public static void main(String[] args) throws Exception {
+		/* testing code, reading from string and write to file test.json
 		String tester = "5\n10";
 		InputStream stream = new ByteArrayInputStream(tester.getBytes(StandardCharsets.UTF_8));
-		//InputStream stream = System.in;
-//		try{	  
-//			ServerSocket ss = new ServerSocket(8192);
-//			Socket s = ss.accept();//establishes connection   
-//			DataOutputStream dout = new DataOutputStream(s.getOutputStream());
-//			JsonObject object = Serializer.serializeObject(createObj(stream)[0]);
-//			JsonWriter writer = Json.createWriter(dout);
-//			writer.writeObject(object);
-//			dout.flush();
-//			dout.close();
-//			s.close();
-//			ss.close();
-//		} catch (Exception e){
-//			e.printStackTrace();
-//		}
 		DataOutputStream dout = new DataOutputStream(new FileOutputStream("test.json"));
 		JsonObject object = Serializer.serializeObject(createObj(stream)[0]);
 		JsonWriter writer = Json.createWriter(dout);
 		writer.writeObject(object);
+		*/
+		InputStream stream = System.in;
+		try{
+			//System.out.println("broadcasting JSON...");
+			ServerSocket ss = new ServerSocket(8192);
+			Socket s = ss.accept();//establishes connection
+			DataOutputStream dout = new DataOutputStream(s.getOutputStream());
+			JsonObject object = Serializer.serializeObject(createObj(stream)[0]);
+			JsonWriter writer = Json.createWriter(dout);
+			writer.writeObject(object);
+			writer.close();
+			dout.flush();
+			dout.close();
+			s.close();
+			ss.close();
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		
 	}  
 }
